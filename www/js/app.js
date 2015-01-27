@@ -68,8 +68,8 @@ angular.module('starter', ['ionic'])
 .controller('SignInCtrl', function($scope, $state, $http, $rootScope, $ionicLoading, $timeout,$ionicPopup) {
 	  
     //$rootScope.getServerIp='http://10.11.201.19/';
-    $rootScope.getServerIp='http://202.40.190.14:8084/'
-	//$rootScope.getServerIp='http://10.11.201.43:8084/'
+   // $rootScope.getServerIp='http://202.40.190.14:8084/'
+	$rootScope.getServerIp='http://10.11.201.43:8084/'
     
     //window.addEventListener("load", initApp);
 	
@@ -95,7 +95,10 @@ angular.module('starter', ['ionic'])
 		}else if(checkConnectionStatus()){
 		
 		}else{
-			$ionicLoading.show();
+	
+			$ionicLoading.show({
+                template: 'Please Wait..'
+            });
 					$http({
 					  method: 'GET',
 					 
@@ -243,7 +246,7 @@ angular.module('starter', ['ionic'])
 
 
 
-.controller('AccStatementCtrl', function($scope, $state, $http, $rootScope,$ionicLoading,$ionicPopup,$timeout,$ionicPopup) {
+.controller('AccStatementCtrl', function($scope, $state, $http, $rootScope,$ionicLoading,$ionicPopup,$timeout,$ionicPopup,$filter) {
 		
 		
 		$ionicLoading.show({
@@ -342,6 +345,11 @@ angular.module('starter', ['ionic'])
 		  //template:'To date'
 		  })
 		}else{
+	//	alert(	(new Date(search.acToDate),'dd/MM/yyyy'));
+	 var f_from_date = $filter('date')(new Date(search.acFromDate), 'dd/MM/yyyy');
+		 var f_to_date = $filter('date')(new Date(search.acToDate),'dd/MM/yyyy');
+							//  alert(f_from_date);
+  
 		
 		$ionicLoading.show({
                 template: 'Please Wait..'
@@ -350,7 +358,7 @@ angular.module('starter', ['ionic'])
 					  method: 'GET',
 					  
 					  url:  $rootScope.getServerIp+'BankAndroidConnectivity/AccountStatementTagCode',
-					  params: {accountno: $scope.sourceAccount,fromDate:search.acFromDate,toDate:search.acToDate,mailID:mailID,sessiongID:sessionID,companyCode:'001'},
+					  params: {accountno: $scope.sourceAccount,fromDate:f_from_date,toDate:f_to_date,mailID:mailID,sessiongID:sessionID,companyCode:'001'},
 					  //type:'JSON',
 					  headers : { 'Content-Type': 'application/json' }
 					}).success(function(data, status, headers, config) {
